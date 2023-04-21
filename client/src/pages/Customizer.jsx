@@ -22,6 +22,7 @@ const Customizer = () => {
         <AnimatePresence>
             {!snap.intro && (
                 <>
+                    {/* left tabs */}
                     <motion.div
                         key="custom"
                         className="absolute top-0 left-0 z-10"
@@ -39,6 +40,8 @@ const Customizer = () => {
                             </div>
                         </div>
                     </motion.div>
+
+                    {/* Go Back button */}
                     <motion.div
                         className="absolute z-10 top-5 right-5"
                         {...fadeAnimation}
@@ -50,6 +53,8 @@ const Customizer = () => {
                             customStyles="w-fit px-4 py-2.5 font-bold text-sm"
                         />
                     </motion.div>
+
+                    {/* Bottom tabs */}
                     <motion.div
                         className="filtertabs-container"
                         {...slideAnimation("up")}
