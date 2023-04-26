@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { easing } from "maath";
 import { useSnapshot } from "valtio";
+
 import state from "../store";
 
 const CameraRig = ({ children }) => {
@@ -9,8 +10,8 @@ const CameraRig = ({ children }) => {
     const snap = useSnapshot(state);
 
     useFrame((state, delta) => {
-        const isBreakpoint = window.innerWidth <= 1260; // in px
-        const isMobile = window.innerWidth <= 600; //in px
+        const isBreakpoint = window.innerWidth <= 1260;
+        const isMobile = window.innerWidth <= 600;
 
         // set the initial position of the model
         let targetPosition = [-0.4, 0, 2];

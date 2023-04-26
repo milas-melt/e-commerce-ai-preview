@@ -7,7 +7,6 @@ import CameraRig from "./CameraRig";
 
 const CanvasModel = () => {
     return (
-        // <div>Canvas</div>
         <Canvas
             shadows
             camera={{ position: [0, 0, 0], fov: 25 }}
@@ -16,6 +15,7 @@ const CanvasModel = () => {
         >
             <ambientLight intensity={0.5} />
             <Environment preset="city" />
+
             <CameraRig>
                 <Backdrop />
                 <Center>

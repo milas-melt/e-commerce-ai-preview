@@ -31,7 +31,8 @@ const Home = () => {
                     >
                         <motion.div {...headTextAnimation}>
                             <h1 className="head-text">
-                                LET'S <br className="xl:block hidden" /> DO IT.
+                                AI designer
+                                <br className="xl:block hidden" /> Hack AI.
                             </h1>
                         </motion.div>
                         <motion.div
@@ -42,7 +43,7 @@ const Home = () => {
                                 Create your unique and exclusive shirt with our
                                 brand-new 3D customization tool.{" "}
                                 <strong>Unleash your imagination</strong> and
-                                define your own style.
+                                define your own style. Use AI to degin it!
                             </p>
 
                             <CustomButton

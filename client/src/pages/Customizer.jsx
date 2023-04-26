@@ -19,16 +19,11 @@ import {
 const Customizer = () => {
     const snap = useSnapshot(state);
 
-    // upload file state
     const [file, setFile] = useState("");
 
-    // AI prompt state
     const [prompt, setPrompt] = useState("");
-
-    // loading state: are we currently generating img or not?
     const [generatingImg, setGeneratingImg] = useState(false);
 
-    //
     const [activeEditorTab, setActiveEditorTab] = useState("");
     const [activeFilterTab, setActiveFilterTab] = useState({
         logoShirt: true,
@@ -40,7 +35,6 @@ const Customizer = () => {
         switch (activeEditorTab) {
             case "colorpicker":
                 return <ColorPicker />;
-
             case "filepicker":
                 return (
                     <FilePicker
@@ -49,12 +43,44 @@ const Customizer = () => {
                         readFile={readFile}
                     />
                 );
-
             case "aipicker":
-                return <AIPicker />;
-
+                return (
+                    <AIPicker
+                        prompt={prompt}
+                        setPrompt={setPrompt}
+                        generatingImg={generatingImg}
+                        handleSubmit={handleSubmit}
+                    />
+                );
             default:
                 return null;
+        }
+    };
+
+    const handleSubmit = async (type) => {
+        if (!prompt) return alert("Please enter a prompt");
+
+        try {
+            setGeneratingImg(true);
+
+            const response = await fetch("http://localhost:8080/api/v1/dalle", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    prompt,
+                }),
+            });
+
+            const data = await response.json();
+
+            handleDecals(type, `data:image/png;base64,${data.photo}`);
+        } catch (error) {
+            alert(error);
+        } finally {
+            setGeneratingImg(false);
+            setActiveEditorTab("");
         }
     };
 
@@ -81,6 +107,15 @@ const Customizer = () => {
                 state.isFullTexture = false;
                 break;
         }
+
+        // after setting the state, activeFilterTab is updated
+
+        setActiveFilterTab((prevState) => {
+            return {
+                ...prevState,
+                [tabName]: !prevState[tabName],
+            };
+        });
     };
 
     const readFile = (type) => {
@@ -94,7 +129,6 @@ const Customizer = () => {
         <AnimatePresence>
             {!snap.intro && (
                 <>
-                    {/* left tabs */}
                     <motion.div
                         key="custom"
                         className="absolute top-0 left-0 z-10"
@@ -106,9 +140,9 @@ const Customizer = () => {
                                     <Tab
                                         key={tab.name}
                                         tab={tab}
-                                        handleClick={() => {
-                                            setActiveEditorTab(tab.name);
-                                        }}
+                                        handleClick={() =>
+                                            setActiveEditorTab(tab.name)
+                                        }
                                     />
                                 ))}
 
@@ -117,7 +151,6 @@ const Customizer = () => {
                         </div>
                     </motion.div>
 
-                    {/* Go Back button */}
                     <motion.div
                         className="absolute z-10 top-5 right-5"
                         {...fadeAnimation}
@@ -130,7 +163,6 @@ const Customizer = () => {
                         />
                     </motion.div>
 
-                    {/* Bottom tabs */}
                     <motion.div
                         className="filtertabs-container"
                         {...slideAnimation("up")}
@@ -140,8 +172,10 @@ const Customizer = () => {
                                 key={tab.name}
                                 tab={tab}
                                 isFilterTab
-                                isActiveTab=""
-                                handleClick={() => {}}
+                                isActiveTab={activeFilterTab[tab.name]}
+                                handleClick={() =>
+                                    handleActiveFilterTab(tab.name)
+                                }
                             />
                         ))}
                     </motion.div>
